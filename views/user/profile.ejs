@@ -1,0 +1,98 @@
+<%- include('../partials/header.ejs') %>
+<main>
+    <h2>My Listings</h2>
+
+    <div class="listings-container">
+        <table class="listing-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (items.length > 0) { %>
+                    <% items.forEach(item => { %>
+                        <tr>
+                            <td>
+                                <a href="/items/<%= item._id %>" class="comic-link">
+                                    <%= item.title %>
+                                </a>
+                            </td>
+                            <td class="<%= item.active ? 'status-active' : 'status-inactive' %>">
+                                <%= item.active ? 'active' : 'inactive' %>
+                            </td>
+                            <td>
+                                <form action="/items/<%= item._id %>/edit" class="edit-form">
+                                    <button type="submit" class="action-btn edit-btn">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </form>
+
+                                <form action="/items/<%= item._id %>?_method=DELETE" method="POST" class="delete-form">
+                                    <button type="submit" class="action-btn delete-btn">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+
+                                <form action="/items/<%= item._id %>/offers" method="GET" class="offers-form">
+                                    <button 
+                                      type="submit" 
+                                      class="action-btn offers-btn" 
+                                      <%= item.totalOffers > 0 ? '' : 'disabled="disabled"' %>>
+                                      View Offers
+                                    </button>
+                                </form>
+                                
+                                  
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="3">You have no listings yet.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>My Offers</h2>
+
+    <div class="listings-container">
+        <table class="listing-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Offered Amount</th>
+                    <th>Status</th>
+                    <th>Item Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (offers.length > 0) { %>
+                    <% offers.forEach(offer => { %>
+                        <tr>
+                            <td>
+                                <a href="/items/<%= offer.item._id %>" class="comic-link">
+                                    <%= offer.item.title %>
+                                </a>
+                            </td>
+                            <td>$<%= offer.amount.toFixed(2) %></td>
+                            <td class="status-<%= offer.status %>"><%= offer.status %></td>
+                            <td class="<%= offer.item.active ? 'status-active' : 'status-inactive' %>">
+                                <%= offer.item.active ? 'active' : 'inactive' %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="4">You haven't made any offers yet.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</main>
+<%- include('../partials/footer.ejs') %>

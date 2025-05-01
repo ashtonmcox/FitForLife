@@ -1,0 +1,52 @@
+<%- include('../partials/header.ejs') %>
+<main>
+    <h2>My Offers</h2>
+
+    <div class="listings-container">
+        <table class="listing-table">
+            <thead>
+                <tr>
+                    <th>Buyer</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (offers.length > 0) { %>
+                    <% offers.forEach(offer => { %>
+                        <tr>
+                            <td>
+                                <p><%= offer.user.firstName + ' ' + offer.user.lastName %></p>
+                            </td>
+                            <td>$<%= offer.amount.toFixed(2) %></td>
+                            <td> 
+                                <% if (offers.active) { %>
+                               
+                                    <form method="POST"action="/items/<%= offer.item %>/offers/<%= offer._id %>/accept?_method=PUT" enctype="multipart/form-data" class="offers-form">
+                                        <button 
+                                        type="submit" 
+                                        class="action-btn offers-btn" 
+                                        <%= offer.active ? 'disabled="disabled"' : '' %>>
+                                        Accept
+                                        </button>
+                                    </form>
+                                    <% } else { %>
+                                            <% if (offer.status === 'accepted') { %>
+                                                <p>Accepted</p>
+                                            <% } else if (offer.status === 'rejected') { %>
+                                                <p>Rejected</p>
+                                            <% } %>
+                                    <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="4">You don't have any offers yet.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</main>
+<%- include('../partials/footer.ejs') %>
